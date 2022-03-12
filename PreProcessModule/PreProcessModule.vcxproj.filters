@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\lite\mnn\core\mnn_handler.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\lite\mnn\cv\mnn_rvm.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\lite\mnn\core\mnn_utils.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\backend.h">
+      <Filter>head files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lite\config.h">
+      <Filter>head files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lite\lite.ai.defs.h">
+      <Filter>head files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lite\lite.ai.headers.h">
+      <Filter>head files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lite\lite.h">
+      <Filter>head files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lite\mnn\core\mnn_config.h">
+      <Filter>head files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lite\mnn\core\mnn_core.h">
+      <Filter>head files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lite\mnn\core\mnn_defs.h">
+      <Filter>head files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lite\mnn\core\mnn_handler.h">
+      <Filter>head files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lite\mnn\cv\mnn_rvm.h">
+      <Filter>head files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lite\mnn\core\mnn_types.h">
+      <Filter>head files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lite\mnn\core\mnn_utils.h">
+      <Filter>head files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\models.h">
+      <Filter>head files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pipeline.h">
+      <Filter>head files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lite\types.h">
+      <Filter>head files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utils.h">
+      <Filter>head files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="source files">
+      <UniqueIdentifier>{ffec63db-72b6-4a3a-9e87-786860403146}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="head files">
+      <UniqueIdentifier>{5855a53d-f984-4d8d-899c-a6ffca2f1866}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
