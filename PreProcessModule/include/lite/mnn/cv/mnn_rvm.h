@@ -14,7 +14,7 @@ namespace mnncv
 	public:
 		explicit MNNRobustVideoMatting(const std::string& _mnn_path,
 			unsigned int _num_threads = 1,
-			unsigned int _variant_type = 0); //
+			unsigned int _variant_type = 0); 
 		~MNNRobustVideoMatting();
 
 	private:
@@ -33,14 +33,7 @@ namespace mnncv
 		// and the input size of each input has been freeze also.
 		std::vector<const char*> input_node_names = { "src", "r1i", "r2i", "r3i", "r4i" };
 		// hardcode output node names, hint only.
-		std::vector<const char*> output_node_names = {
-			"fgr",
-			"pha",
-			"r1o",
-			"r2o",
-			"r3o",
-			"r4o"
-		};
+		std::vector<const char*> output_node_names = { "fgr", "pha", "r1o", "r2o", "r3o", "r4o" };
 		bool context_is_update = false;
 		bool context_is_initialized = false;
 
@@ -82,11 +75,11 @@ namespace mnncv
 	private:
 		void transform(const cv::Mat& mat_rs); // without resize
 
-		void initialize_pretreat(); //
-
 		void initialize_interpreter();
 
 		void initialize_context();
+
+		void initialize_pretreat(); //
 
 		/**
 		*  alpha matting from mnn matting result, combines foreground and background together, according to alpha matting

@@ -7,12 +7,13 @@
 
 using mnncv::MNNRobustVideoMatting;
 
+#ifdef PREPROCESS_DEBUG
 long total_time = 0;
 long write_time = 0;
 long runsession_time = 0;
 long copy_time = 0;
 long mat_matrix_time = 0;
-
+#endif
 
 MNNRobustVideoMatting::MNNRobustVideoMatting(
 	const std::string& _mnn_path,
@@ -148,15 +149,23 @@ void MNNRobustVideoMatting::detect(const cv::Mat& mat, types::MattingContent& co
 	this->transform(mat_rs);
 
 	// 2. inference & run session
+#ifdef PREPROCESS_DEBUG
 	auto runsession_t = start_record();
+#endif // PREPROCESS_DEBUG
 	mnn_interpreter->runSession(mnn_session);
+#ifdef PREPROCESS_DEBUG
 	runsession_time += stop_record(runsession_t);
+#endif	// PREPROCESS_DEBUG
 
 	auto output_tensors = mnn_interpreter->getSessionOutputAll(mnn_session);	//now result get
 	// 3. generate matting
+#ifdef PREPROCESS_DEBUG
 	auto mat_matrix_t = start_record();
+#endif // PREPROCESS_DEBUG
 	this->generate_matting(output_tensors, content, img_h, img_w);
+#ifdef PREPROCESS_DEBUG
 	mat_matrix_time += stop_record(mat_matrix_t);
+#endif // PREPROCESS_DEBUG
 	// 4.  update context (needed for video matting)
 	if (video_mode)
 	{
@@ -170,7 +179,9 @@ void MNNRobustVideoMatting::detect_video(
 	std::vector<types::MattingContent>& contents, bool save_contents,
 	unsigned int writer_fps)
 {
+#ifdef PREPROCESS_DEBUG
 	auto total_t = start_record();
+#endif	// PREPROCESS_DEBUG
 	// 0. init video capture
 	cv::VideoCapture video_capture(video_path);
 	const unsigned int width = video_capture.get(cv::CAP_PROP_FRAME_WIDTH);
@@ -198,25 +209,30 @@ void MNNRobustVideoMatting::detect_video(
 		types::MattingContent content;
 		this->detect(mat, content, true); // video_mode true
 		// 3. save contents and writing out.
+#ifdef PREPROCESS_DEBUG
 		auto write_t = start_record();
+#endif	// PREPROCESS_DEBUG
 		if (content.flag)
 		{
 			if (save_contents) contents.push_back(content);
 			if (!content.merge_mat.empty()) video_writer.write(content.merge_mat);
 		}
+#ifdef PREPROCESS_DEBUG
 		write_time += stop_record(write_t);
+#endif	// PREPROCESS_DEBUG
 		// 4. check context states.
 		if (!context_is_update) break;
 #ifdef LITEMNN_DEBUG
 		std::cout << i << "/" << frame_count << " done!" << "\n";
 #endif
 	}
-	
+#ifdef PREPROCESS_DEBUG
 	std::cout  << " total_time: " << stop_record(total_t) << std::endl;
 	std::cout  << " write_time: " << write_time << std::endl;
 	std::cout  << " runsession_time: " << runsession_time << std::endl;
 	std::cout  << " copy_time: " << copy_time << std::endl;
 	std::cout  << " mat_matrix_time: " << mat_matrix_time << std::endl;
+#endif
 	// 5. release
 	video_capture.release();
 	video_writer.release();
@@ -258,7 +274,7 @@ void MNNRobustVideoMatting::generate_matting(
 	//	<< "-"<< foremat.elemSize() << "-" << foremat.elemSize1() <<  std::endl;
 
 	//background mat
-	cv::Mat backmat = cv::imread("resources/background01.jpg");
+	cv::Mat backmat = cv::imread("resources/background04.jpg");
 	cv::resize(backmat, backmat, cv::Size(input_width, input_height));
 	backmat.convertTo(backmat, CV_32FC3);
 	backmat /= 255.f;
@@ -300,12 +316,20 @@ void MNNRobustVideoMatting::update_context(const std::map<std::string, MNN::Tens
 	auto device_r2o_ptr = output_tensors.at("r2o");
 	auto device_r3o_ptr = output_tensors.at("r3o");
 	auto device_r4o_ptr = output_tensors.at("r4o");
+
+#ifdef PREPROCESS_DEBUG
 	auto copy_t = start_record();
+#endif	// PREPROCESS_DEBUG
+
 	device_r1o_ptr->copyToHostTensor(r1i_tensor);
 	device_r2o_ptr->copyToHostTensor(r2i_tensor);
 	device_r3o_ptr->copyToHostTensor(r3i_tensor);
 	device_r4o_ptr->copyToHostTensor(r4i_tensor);
+
+#ifdef PREPROCESS_DEBUG
 	copy_time += stop_record(copy_t);
+#endif	// PREPROCESS_DEBUG
+
 	context_is_update = true;
 }
 
