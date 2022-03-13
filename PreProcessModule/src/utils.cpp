@@ -1,5 +1,5 @@
 //
-// Created by DefTruth on 2021/10/7.
+// Created by YileiYang on 2022/3/2.
 //
 
 #include "utils.h"
@@ -27,7 +27,7 @@ std::wstring lite::utils::to_wstring(const std::string& str)
 	return wstr;
 }
 
-// reference: https://github.com/DefTruth/headpose-fsanet-pytorch/blob/master/src/utils.py
+// reference: https://github.com/YileiYang/headpose-fsanet-pytorch/blob/master/src/utils.py
 void lite::utils::draw_axis_inplace(cv::Mat& mat_inplace,
 	const types::EulerAngles& euler_angles,
 	float size, int thickness)

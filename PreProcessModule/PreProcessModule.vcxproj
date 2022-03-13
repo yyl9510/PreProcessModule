@@ -138,7 +138,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CONSOLE;NOMINMAX;_CRT_SECURE_NO_WARNINGS;PREPROCESS_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>./;D:\opencv_430\build\include;D:\opencv_430\build\include\opencv2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./extern_include;D:\opencv_430\build\include;D:\opencv_430\build\include\opencv2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -167,9 +167,9 @@
     <ClInclude Include="include\lite\mnn\core\mnn_defs.h" />
     <ClInclude Include="include\lite\mnn\core\mnn_handler.h" />
     <ClInclude Include="include\lite\mnn\core\mnn_types.h" />
-    <ClInclude Include="include\lite\mnn\core\mnn_utils.h" />
     <ClInclude Include="include\lite\mnn\cv\mnn_rvm.h" />
     <ClInclude Include="include\lite\types.h" />
+    <ClInclude Include="include\mnn_utils.h" />
     <ClInclude Include="include\models.h" />
     <ClInclude Include="include\pipeline.h" />
     <ClInclude Include="include\utils.h" />

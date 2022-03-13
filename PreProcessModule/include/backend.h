@@ -1,11 +1,11 @@
 //
-// Created by DefTruth on 2021/5/30.
+// Created by YileiYang on 2022/2/27.
 //
 
 #ifndef LITE_AI_BACKEND_H
 #define LITE_AI_BACKEND_H
 
-#include "config.h"
+#include "lite/config.h"
 
 // BACKEND ONNXRuntime
 #ifdef BACKEND_ONNXRUNTIME

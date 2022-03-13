@@ -1,5 +1,5 @@
 //
-// Created by DefTruth on 2021/10/10.
+// Created by YileiYang on 2022/2/27.
 //
 
 #ifndef LITE_AI_TOOLKIT_MNN_CV_MNN_RVM_H
@@ -21,7 +21,7 @@ namespace mnncv
 		std::shared_ptr<MNN::Interpreter> mnn_interpreter;
 		MNN::Session* mnn_session = nullptr;
 		MNN::ScheduleConfig schedule_config;
-		std::shared_ptr<MNN::CV::ImageProcess> pretreat; // init at runtime
+		std::shared_ptr<MNN::CV::ImageProcess> pretreat; // init at runtime, transfer data from mat to tensor
 		const char* log_id = nullptr;
 		const char* mnn_path = nullptr;
 
@@ -30,14 +30,8 @@ namespace mnncv
 		const float norm_vals[3] = { 1.f / 255.f, 1.f / 255.f, 1.f / 255.f };
 		// hardcode input node names, hint only.
 		// downsample_ratio has been freeze while onnx exported
-		// and, the input size of each input has been freeze, also.
-		std::vector<const char*> input_node_names = {
-			"src",
-			"r1i",
-			"r2i",
-			"r3i",
-			"r4i"
-		};
+		// and the input size of each input has been freeze also.
+		std::vector<const char*> input_node_names = { "src", "r1i", "r2i", "r3i", "r4i" };
 		// hardcode output node names, hint only.
 		std::vector<const char*> output_node_names = {
 			"fgr",
