@@ -2,10 +2,13 @@
 // Created by YileiYang on 2022/2/27.
 //
 
-#ifndef LITE_AI_BACKEND_H
-#define LITE_AI_BACKEND_H
+#ifndef INFERENCE_BACKEND_H
+#define INFERENCE_BACKEND_H
 
-#include "lite/config.h"
+//#define ENABLE_ONNXRUNTIME
+/* #undef ENABLE_ONNXRUNTIME_CUDA */
+#define ENABLE_OPENCV_VIDEOIO
+#define BACKEND_MNN
 
 // BACKEND ONNXRuntime
 #ifdef BACKEND_ONNXRUNTIME
@@ -75,4 +78,4 @@
 
 #endif
 
-#endif //LITE_AI_BACKEND_H
+#endif //INFERENCE_BACKEND_H

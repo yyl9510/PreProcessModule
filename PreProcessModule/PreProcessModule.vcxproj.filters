@@ -4,66 +4,24 @@
     <ClCompile Include="src\main.cpp">
       <Filter>source files</Filter>
     </ClCompile>
-    <ClCompile Include="include\lite\mnn\core\mnn_handler.cpp">
+    <ClCompile Include="src\mnn_rvm.cpp">
       <Filter>source files</Filter>
     </ClCompile>
-    <ClCompile Include="include\lite\mnn\cv\mnn_rvm.cpp">
-      <Filter>source files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\lite\mnn\core\mnn_utils.cpp">
-      <Filter>source files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\utils.cpp">
+    <ClCompile Include="src\mnn_utils.cpp">
       <Filter>source files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\backend.h">
-      <Filter>head files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lite\config.h">
-      <Filter>head files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lite\lite.ai.defs.h">
-      <Filter>head files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lite\lite.ai.headers.h">
-      <Filter>head files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lite\lite.h">
-      <Filter>head files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lite\mnn\core\mnn_config.h">
-      <Filter>head files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lite\mnn\core\mnn_core.h">
-      <Filter>head files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lite\mnn\core\mnn_defs.h">
-      <Filter>head files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lite\mnn\core\mnn_handler.h">
-      <Filter>head files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lite\mnn\cv\mnn_rvm.h">
-      <Filter>head files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lite\mnn\core\mnn_types.h">
-      <Filter>head files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\models.h">
-      <Filter>head files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\pipeline.h">
-      <Filter>head files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lite\types.h">
-      <Filter>head files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\utils.h">
+    <ClInclude Include="include\inference_backend.h">
       <Filter>head files</Filter>
     </ClInclude>
     <ClInclude Include="include\mnn_utils.h">
+      <Filter>head files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pre_process.h">
+      <Filter>head files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\mnn_rvm.h">
       <Filter>head files</Filter>
     </ClInclude>
   </ItemGroup>

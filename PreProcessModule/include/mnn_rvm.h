@@ -2,14 +2,19 @@
 // Created by YileiYang on 2022/2/27.
 //
 
-#ifndef LITE_AI_TOOLKIT_MNN_CV_MNN_RVM_H
-#define LITE_AI_TOOLKIT_MNN_CV_MNN_RVM_H
+#ifndef PREPROCESS_MNN_RVM_H
+#define PREPROCESS_MNN_RVM_H
 
-#include "lite/mnn/core/mnn_core.h"
+#include "pre_process.h"
+
+#include "MNN/Interpreter.hpp"
+#include "MNN/MNNDefine.h"
+#include "MNN/Tensor.hpp"
+#include "MNN/ImageProcess.hpp"
 
 namespace mnncv
 {
-	class LITE_EXPORTS MNNRobustVideoMatting
+	class PREPROCESS_EXPORTS MNNRobustVideoMatting
 	{
 	public:
 		explicit MNNRobustVideoMatting(const std::string& _mnn_path,
@@ -91,7 +96,7 @@ namespace mnncv
 		*  @param img_w real image width
 		*/
 		void generate_matting(const std::map<std::string, MNN::Tensor*>& output_tensors,
-			types::MattingContent& content,
+			mnncv::MattingContent& content,
 			int img_h, int img_w);
 
 		void update_context(const std::map<std::string, MNN::Tensor*>& output_tensors);
@@ -100,11 +105,11 @@ namespace mnncv
 		/**
 		 * Image Matting Using RVM(https://github.com/PeterL1n/RobustVideoMatting)
 		 * @param mat: cv::Mat BGR HWC
-		 * @param content: types::MattingContent to catch the detected results.
+		 * @param content: mnncv::MattingContent to catch the detected results.
 		 * @param video_mode: false by default.
 		 * See https://github.com/PeterL1n/RobustVideoMatting/blob/master/documentation/inference_zh_Hans.md
 		 */
-		void detect(const cv::Mat& mat, types::MattingContent& content, bool video_mode = false);
+		void detect(const cv::Mat& mat, mnncv::MattingContent& content, bool video_mode = false);
 		/**
 		 * Video Matting Using RVM(https://github.com/PeterL1n/RobustVideoMatting)
 		 * @param video_path: eg. xxx/xxx/input.mp4
@@ -116,7 +121,7 @@ namespace mnncv
 		 */
 		void detect_video(const std::string& video_path,
 			const std::string& output_path,
-			std::vector<types::MattingContent>& contents,
+			std::vector<mnncv::MattingContent>& contents,
 			bool save_contents = false,
 			unsigned int writer_fps = 20);
 		/**
@@ -128,4 +133,4 @@ namespace mnncv
 }
 
 
-#endif //LITE_AI_TOOLKIT_MNN_CV_MNN_RVM_H
+#endif //PREPROCESS_MNN_RVM_H

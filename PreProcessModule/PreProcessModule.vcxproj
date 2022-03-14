@@ -150,29 +150,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="include\lite\mnn\core\mnn_handler.cpp" />
-    <ClCompile Include="include\lite\mnn\core\mnn_utils.cpp" />
-    <ClCompile Include="include\lite\mnn\cv\mnn_rvm.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\utils.cpp" />
+    <ClCompile Include="src\mnn_rvm.cpp" />
+    <ClCompile Include="src\mnn_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\backend.h" />
-    <ClInclude Include="include\lite\config.h" />
-    <ClInclude Include="include\lite\lite.ai.defs.h" />
-    <ClInclude Include="include\lite\lite.ai.headers.h" />
-    <ClInclude Include="include\lite\lite.h" />
-    <ClInclude Include="include\lite\mnn\core\mnn_config.h" />
-    <ClInclude Include="include\lite\mnn\core\mnn_core.h" />
-    <ClInclude Include="include\lite\mnn\core\mnn_defs.h" />
-    <ClInclude Include="include\lite\mnn\core\mnn_handler.h" />
-    <ClInclude Include="include\lite\mnn\core\mnn_types.h" />
-    <ClInclude Include="include\lite\mnn\cv\mnn_rvm.h" />
-    <ClInclude Include="include\lite\types.h" />
+    <ClInclude Include="include\inference_backend.h" />
+    <ClInclude Include="include\mnn_rvm.h" />
     <ClInclude Include="include\mnn_utils.h" />
-    <ClInclude Include="include\models.h" />
-    <ClInclude Include="include\pipeline.h" />
-    <ClInclude Include="include\utils.h" />
+    <ClInclude Include="include\pre_process.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

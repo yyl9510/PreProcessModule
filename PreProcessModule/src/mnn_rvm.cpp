@@ -136,7 +136,7 @@ inline void MNNRobustVideoMatting::transform(const cv::Mat& mat_rs)
 	pretreat->convert(mat_rs.data, input_width, input_height, mat_rs.step[0], src_tensor);	//data from mat_rs to src_tensor
 }
 
-void MNNRobustVideoMatting::detect(const cv::Mat& mat, types::MattingContent& content, bool video_mode)
+void MNNRobustVideoMatting::detect(const cv::Mat& mat, mnncv::MattingContent& content, bool video_mode)
 {
 	if (mat.empty()) return;
 	int img_h = mat.rows;
@@ -176,7 +176,7 @@ void MNNRobustVideoMatting::detect(const cv::Mat& mat, types::MattingContent& co
 
 void MNNRobustVideoMatting::detect_video(
 	const std::string& video_path, const std::string& output_path,
-	std::vector<types::MattingContent>& contents, bool save_contents,
+	std::vector<mnncv::MattingContent>& contents, bool save_contents,
 	unsigned int writer_fps)
 {
 #ifdef PREPROCESS_DEBUG
@@ -206,7 +206,7 @@ void MNNRobustVideoMatting::detect_video(
 	while (video_capture.read(mat))
 	{
 		i += 1;
-		types::MattingContent content;
+		MattingContent content;
 		this->detect(mat, content, true); // video_mode true
 		// 3. save contents and writing out.
 #ifdef PREPROCESS_DEBUG
@@ -222,7 +222,7 @@ void MNNRobustVideoMatting::detect_video(
 #endif	// PREPROCESS_DEBUG
 		// 4. check context states.
 		if (!context_is_update) break;
-#ifdef LITEMNN_DEBUG
+#ifdef PREPROCESS_DEBUG
 		std::cout << i << "/" << frame_count << " done!" << "\n";
 #endif
 	}
@@ -240,7 +240,7 @@ void MNNRobustVideoMatting::detect_video(
 
 void MNNRobustVideoMatting::generate_matting(
 	const std::map<std::string,  MNN::Tensor*>& output_tensors,
-	types::MattingContent& content,
+	mnncv::MattingContent& content,
 	int img_h, int img_w)
 {
 	auto device_fgr_ptr = output_tensors.at("fgr");
@@ -370,7 +370,7 @@ void MNNRobustVideoMatting::mnn_capture() {
 			break;
 		}
 		else {	// If frames are present
-			types::MattingContent content;
+			mnncv::MattingContent content;
 			this->detect(frame, content, true); // video_mode true
 
 			//cv::Mat outImage = alpha_blending(content.fgr_mat, background_img, content.pha_mat);
@@ -394,7 +394,7 @@ void MNNRobustVideoMatting::mnn_capture() {
 
 void MNNRobustVideoMatting::print_debug_string()
 {
-	std::cout << "LITEMNN_DEBUG LogId: " << log_id << "\n";
+	std::cout << "PREPROCESS_MNN_DEBUG LogId: " << log_id << "\n";
 	std::cout << "=============== Input-Dims ==============\n";
 	if (src_tensor) src_tensor->printShape();
 	if (r1i_tensor) r1i_tensor->printShape();
