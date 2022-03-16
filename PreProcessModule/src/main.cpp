@@ -29,7 +29,8 @@ static void test_mnn(std::string video_path, std::string output_path)
 	delete rvm;
 }
 
-static void test_mnn_capture() {
+static void test_mnn_capture() 
+{
 	//std::string mnn_path = "models/mnn/rvm_mobilenetv3_fp32-480-640.mnn";
 	//std::string mnn_path = "models/mnn/rvm_mobilenetv3_fp32-1080-1920.mnn";
 	std::string mnn_path = "models/mnn/rvm_resnet50_fp32-1080-1920.mnn";
@@ -43,7 +44,7 @@ static void test_mnn_capture() {
 
 static void test_preprocess()
 {
-	test_mnn_capture();
+	//test_mnn_capture();
 	
 	//test_mnn("resources/input.mp4",  "result/input_rvm.mp4");
 	//test_mnn("resources/test_rvm_0.mp4",  "result/test_rvm_0_rvm.mp4");
@@ -55,6 +56,7 @@ static void test_preprocess()
 	//test_mnn("resources/mobile_capture2.mp4",  "result/mobile_capture2_rvm.mp4");
 	//test_mnn("resources/computer_capture.mp4",  "result/computer_capture_rvm.mp4");
 	//test_mnn("resources/computer_record_0313.mp4",  "result/computer_record_0313_rvm.mp4");
+	test_mnn("resources/demo.mp4",  "result/demo_rvm.mp4");
 	
 	//test_mnn_pic("resources/test_lite_rvm.jpg", "result/test_lite_mg_matting_input_rvm.jpg");
 }

@@ -83,6 +83,7 @@ namespace mnncv
 		bool alpha_is_update = false;	//signal for whether alpha_new is ok
 		std::string backmat_path;
 		
+		bool is_processing = false;
 
 		// un-copyable
 	protected:
@@ -116,6 +117,8 @@ namespace mnncv
 		 * @param writer_fps: FPS for VideoWriter, 20 by default.
 		 */
 		void alpha_matting(bool video_mode = true);
+
+		void alpha_matting_loop(bool video_mode);	//used for live stream
 
 		/**
 		 *	3. merge the foremat , backmat and alphamat to merge_mat
