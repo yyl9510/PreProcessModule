@@ -20,27 +20,14 @@ void pwd() {
 	std::cout << _getcwd(ch, 128) << std::endl;
 }
 
+void cur_thread() {
+	std::cout << "cur thread id: " << std::this_thread::get_id() << std::endl;
+}
+
 void imshow(const std::string& name, cv::Mat& mat) {
 	cv::imshow(name, mat);
 	cv::waitKey(0);
 	cv::destroyAllWindows();
-}
-
-void alpha_blending(cv::Mat& foremat, cv::Mat& backmat, cv::Mat& alpha, cv::Mat* outImage) {
-
-	// Get floating point pointers to the data matrices
-	float* fptr = reinterpret_cast<float*>(foremat.data);
-	float* bptr = reinterpret_cast<float*>(backmat.data);
-	float* alp_ptr = reinterpret_cast<float*>(alpha.data);
-	float* outImagePtr = reinterpret_cast<float*>(outImage->data);
-
-	const unsigned int channel_step = foremat.rows * foremat.cols;
-
-	for (int pixel = 0; pixel < channel_step; pixel++, alp_ptr++) {
-		for (int channel = 0; channel < 3; channel++) {
-			*outImagePtr++ = (*fptr++) * (*alp_ptr) + (*bptr++) * (1.0f - *alp_ptr);
-		}
-	}
 }
 
 void remove_small_connected_area(cv::Mat& alpha_pred)

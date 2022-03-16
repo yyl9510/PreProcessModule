@@ -5,6 +5,7 @@
 #ifndef PREPROCESS_MNN_RVM_H
 #define PREPROCESS_MNN_RVM_H
 
+#include <memory>
 #include "pre_process.h"
 
 #include "MNN/Interpreter.hpp"
@@ -19,7 +20,8 @@ namespace mnncv
 	public:
 		explicit MNNRobustVideoMatting(const std::string& _mnn_path,
 			unsigned int _num_threads = 1,
-			unsigned int _variant_type = 0); 
+			unsigned int _variant_type = 0,
+			const std::string& _background_path = "resources/background01.jpg");
 		~MNNRobustVideoMatting();
 
 	private:
@@ -39,7 +41,7 @@ namespace mnncv
 		std::vector<const char*> input_node_names = { "src", "r1i", "r2i", "r3i", "r4i" };
 		// hardcode output node names, hint only.
 		std::vector<const char*> output_node_names = { "fgr", "pha", "r1o", "r2o", "r3o", "r4o" };
-		bool context_is_update = false;
+		//bool context_is_update = false;
 		bool context_is_initialized = false;
 
 	private:
@@ -58,14 +60,29 @@ namespace mnncv
 		MNN::Tensor* r4i_tensor = nullptr;
 		// input size & variant_type, initialize at runtime.
 		const unsigned int variant_type;
-		int input_height;	// tensor's height of the model 
-		int input_width;		// tensor's width of the model 
+		int img_h;	// video 's image height
+		int img_w;	// video 's image width
+		int tensor_height;	// tensor's height of the model 
+		int tensor_width;		// tensor's width of the model 
 		int dimension_type; // hint only
 		unsigned int src_size;
 		unsigned int r1i_size;
 		unsigned int r2i_size;
 		unsigned int r3i_size;
 		unsigned int r4i_size;
+
+		//std::shared_ptr<cv::Mat> foremat;	//forground image,	CV_32FC3, 1/255.f
+		//std::shared_ptr<cv::Mat> backmat;	//background image, CV_32FC3, 1/255.f
+		//std::shared_ptr<cv::Mat> alpha;		//alpha mat, CV_32FC1
+		//std::shared_ptr<cv::Mat> alpha_new;	//alpha mat, CV_32FC1, update alpha_new and use alpha
+		
+		cv::Mat foremat;	//forground image,	CV_8UC3
+		cv::Mat backmat;	//background image, CV_32FC3
+		cv::Mat alpha;		//alpha mat, CV_32FC1
+		cv::Mat alpha_new;	//alpha mat, CV_32FC1, update alpha_new and use alpha
+		bool alpha_is_update = false;	//signal for whether alpha_new is ok
+		std::string backmat_path;
+		
 
 		// un-copyable
 	protected:
@@ -84,51 +101,46 @@ namespace mnncv
 
 		void initialize_context();
 
-		void initialize_pretreat(); //
+		void initialize_pretreat();
 
-		/**
-		*  alpha matting from mnn matting result, combines foreground and background together, according to alpha matting
-		*  @param output_tensors contains the result of mnn rvm,
-		*      while fgr is the foreground data, which has three channels, 
-		*      and pha is the alpha matting data, which has one channel
-		*  @param content the result container
-		*	@param img_h real image height
-		*  @param img_w real image width
-		*/
-		void generate_matting(const std::map<std::string, MNN::Tensor*>& output_tensors,
-			mnncv::MattingContent& content,
-			int img_h, int img_w);
+		void set_background_image(const std::string& backpath);
 
+		void update_alpha(const std::map<std::string, MNN::Tensor*>& output_tensors);
 		void update_context(const std::map<std::string, MNN::Tensor*>& output_tensors);
 
-	public:
 		/**
-		 * Image Matting Using RVM(https://github.com/PeterL1n/RobustVideoMatting)
-		 * @param mat: cv::Mat BGR HWC
-		 * @param content: mnncv::MattingContent to catch the detected results.
-		 * @param video_mode: false by default.
-		 * See https://github.com/PeterL1n/RobustVideoMatting/blob/master/documentation/inference_zh_Hans.md
-		 */
-		void detect(const cv::Mat& mat, mnncv::MattingContent& content, bool video_mode = false);
-		/**
-		 * Video Matting Using RVM(https://github.com/PeterL1n/RobustVideoMatting)
+		 * 2. Get the Matting Using RVM(https://github.com/PeterL1n/RobustVideoMatting)
 		 * @param video_path: eg. xxx/xxx/input.mp4
 		 * @param output_path: eg. xxx/xxx/output.mp4
-		 * @param contents: vector of MattingContent to catch the detected results.
-		 * @param save_contents: false by default, whether to save MattingContent.
 		 * See https://github.com/PeterL1n/RobustVideoMatting/blob/master/documentation/inference_zh_Hans.md
 		 * @param writer_fps: FPS for VideoWriter, 20 by default.
 		 */
-		void detect_video(const std::string& video_path,
-			const std::string& output_path,
-			std::vector<mnncv::MattingContent>& contents,
-			bool save_contents = false,
-			unsigned int writer_fps = 20);
+		void alpha_matting(bool video_mode = true);
+
 		/**
-		* capture live stream from camera
-		* @param output_path: eg. xxx/xxx/output.mp4
-		*/
+		 *	3. merge the foremat , backmat and alphamat to merge_mat
+		 */
+		void alpha_merge(cv::Mat& merge_mat);
+
+	public:
+		/**
+		 * 1 .detect one picture
+		 * @param output_path: eg. xxx/xxx/output.jpg
+		 */
+		void detect_pic(const std::string& img_path, const std::string& output_path = nullptr);
+		/**
+		 * 1 .capture live stream from camera
+		 */
 		void mnn_capture();
+
+		/**
+		 * 1. detect video
+		 * @param video_path: eg. xxx/xxx/input.mp4
+		 * @param output_path: eg. xxx/xxx/output.mp4
+		 */
+		void detect_video(const std::string& video_path, const std::string& output_path);
+
+
 	};
 }
 
