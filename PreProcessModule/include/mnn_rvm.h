@@ -104,7 +104,7 @@ namespace mnncv
 
 		void initialize_pretreat();
 
-		void set_background_image(const std::string& backpath);
+		
 
 		void update_alpha(const std::map<std::string, MNN::Tensor*>& output_tensors);
 		void update_context(const std::map<std::string, MNN::Tensor*>& output_tensors);
@@ -143,7 +143,7 @@ namespace mnncv
 		 */
 		void detect_video(const std::string& video_path, const std::string& output_path);
 
-
+		void set_background_image(const std::string& backpath);
 	};
 }
 

@@ -16,6 +16,8 @@ long write_time = 0;
 long merge_time = 0;
 #endif
 
+int alpha_count = 0;
+
 MNNRobustVideoMatting::MNNRobustVideoMatting(
 	const std::string& _mnn_path,
 	unsigned int _num_threads,
@@ -139,7 +141,8 @@ inline void MNNRobustVideoMatting::initialize_pretreat()
 }
 
 
-void MNNRobustVideoMatting::set_background_image(const std::string& backpath) {
+void MNNRobustVideoMatting::set_background_image(const std::string& backpath) 
+{
 	if (backpath.empty() || backpath.length() == 0 ) {
 		return;
 	}
@@ -263,6 +266,10 @@ void MNNRobustVideoMatting::mnn_capture() {
 	img_h = video_capture.get(cv::CAP_PROP_FRAME_HEIGHT);
 	double fps = video_capture.get(cv::CAP_PROP_FPS);
 
+#ifdef PREPROCESS_DEBUG
+	auto total_t = start_record();
+#endif	// PREPROCESS_DEBUG
+
 	//get current time
 	time_t cur_time = time(0);
 	tm* local_cur_time = localtime(&cur_time);
@@ -270,9 +277,9 @@ void MNNRobustVideoMatting::mnn_capture() {
 	time_stream << local_cur_time->tm_year + 1900 << local_cur_time->tm_mon + 1 \
 		<< local_cur_time->tm_mday << local_cur_time->tm_hour \
 		<< local_cur_time->tm_min << local_cur_time->tm_sec;
-
 	std::string output_path = "result/capture_" + time_stream.str() + ".mp4";
 	cv::VideoWriter video_writer(output_path, cv::VideoWriter::fourcc('m', 'p', '4', 'v'), fps, cv::Size(img_w, img_h));
+
 	if (!video_writer.isOpened())
 	{
 		std::cout << "Can not open writer: " << output_path << std::endl;
@@ -324,16 +331,21 @@ void MNNRobustVideoMatting::mnn_capture() {
 
 	}
 #ifdef PREPROCESS_DEBUG
-	std::cout << " runsession_time: " << runsession_time << std::endl;
-	std::cout << " update_alpha_time: " << update_alpha_time << std::endl;
-	std::cout << " copy_time: " << copy_time << std::endl;
-	std::cout << " merge_time: " << merge_time << std::endl;
+	total_time += stop_record(total_t);
+	std::cout << " total_time: " << total_time;
+	std::cout << " runsession_time: " << runsession_time;
+	std::cout << " update_alpha_time: " << update_alpha_time;
+	std::cout << " copy_time: " << copy_time;
+	std::cout << " merge_time: " << merge_time;
 	std::cout << " write_time: " << write_time << std::endl;
+	std::cout << " total count:" << count;
+	std::cout << " alpha_count:" << alpha_count;
+	std::cout << " fps: " << std::to_string(alpha_count * 1000 / total_time) << std::endl;
 #endif
-	std::cout << " total time :" << (time(0) - cur_time) << std::endl;
-	std::cout << " total count :" << count << std::endl;
+	
 	// 5. release
 	is_processing = false;
+	alpha_matting_thread.join();
 	video_capture.release();
 	video_writer.release();
 }
@@ -379,7 +391,7 @@ void MNNRobustVideoMatting::alpha_matting(bool video_mode)
 
 	// 3. update alpha matting
 	this->update_alpha(output_tensors);
-
+	
 #ifdef PREPROCESS_DEBUG
 	update_alpha_time += stop_record(mat_matrix_t);
 #endif // PREPROCESS_DEBUG
@@ -400,6 +412,11 @@ void MNNRobustVideoMatting::alpha_matting_loop(bool video_mode)
 	{
 		if (foremat.empty()) continue;
 		if (!context_is_initialized) continue;
+
+#ifdef PREPROCESS_DEBUG
+		auto copy_t = start_record();
+#endif	// PREPROCESS_DEBUG
+
 		//get foremat from MNNRobustVideoMatting instance
 		cv::Mat fore_mat;
 		foremat.copyTo(fore_mat);
@@ -408,11 +425,31 @@ void MNNRobustVideoMatting::alpha_matting_loop(bool video_mode)
 		}
 		// 1. make input tensor
 		this->transform(fore_mat);
+#ifdef PREPROCESS_DEBUG
+		copy_time += stop_record(copy_t);
+#endif	// PREPROCESS_DEBUG
+
+
+#ifdef PREPROCESS_DEBUG
+		auto runsession_t = start_record();
+#endif // PREPROCESS_DEBUG
+
 		// 2. inference & run session
 		mnn_interpreter->runSession(mnn_session);
 		auto output_tensors = mnn_interpreter->getSessionOutputAll(mnn_session);	//now result get
+#ifdef PREPROCESS_DEBUG
+		runsession_time += stop_record(runsession_t);
+#endif	// PREPROCESS_DEBUG
+
+#ifdef PREPROCESS_DEBUG
+		auto mat_matrix_t = start_record();
+#endif // PREPROCESS_DEBUG
 		// 3. update alpha matting
 		this->update_alpha(output_tensors);
+		std::cout << ++alpha_count << std::endl;
+#ifdef PREPROCESS_DEBUG
+		update_alpha_time += stop_record(mat_matrix_t);
+#endif // PREPROCESS_DEBUG
 		// 4.  update context (needed for video matting)
 		if (video_mode)
 		{
