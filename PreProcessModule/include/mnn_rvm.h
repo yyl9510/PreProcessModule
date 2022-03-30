@@ -21,7 +21,7 @@ namespace mnncv
 		explicit MNNRobustVideoMatting(const std::string& _mnn_path,
 			unsigned int _num_threads = 1,
 			unsigned int _variant_type = 0,
-			const std::string& _background_path = "resources/background01.jpg");
+			const std::string& _background_path = "resources/background02.jpg");
 		~MNNRobustVideoMatting();
 
 	private:
@@ -71,11 +71,6 @@ namespace mnncv
 		unsigned int r3i_size;
 		unsigned int r4i_size;
 
-		//std::shared_ptr<cv::Mat> foremat;	//forground image,	CV_32FC3, 1/255.f
-		//std::shared_ptr<cv::Mat> backmat;	//background image, CV_32FC3, 1/255.f
-		//std::shared_ptr<cv::Mat> alpha;		//alpha mat, CV_32FC1
-		//std::shared_ptr<cv::Mat> alpha_new;	//alpha mat, CV_32FC1, update alpha_new and use alpha
-		
 		cv::Mat foremat;	//forground image,	CV_8UC3
 		cv::Mat backmat;	//background image, CV_32FC3
 		cv::Mat alpha;		//alpha mat, CV_32FC1

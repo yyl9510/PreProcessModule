@@ -199,3 +199,32 @@ void addBrightness(const cv::Mat& src) {
 
 	waitKey(0);
 }
+
+
+void drawTransparency(Mat& frame, Mat& transp, int xPos, int yPos) {
+	Mat mask;
+	vector<Mat> layers;
+
+	split(transp, layers); // seperate channels
+	Mat rgb[3] = { layers[0],layers[1],layers[2] };
+	mask = layers[3] / 255; // png's alpha channel used as mask
+
+	merge(rgb, 3, transp);  // put together the RGB channels, now transp insn't transparent 
+	transp.copyTo(frame.rowRange(yPos, yPos + transp.rows).colRange(xPos, xPos + transp.cols), mask);
+}
+
+
+void addWatermark(cv::Mat& src, cv::Mat& watermark, Info info) {
+	cv::Rect roi(src.cols * info.offset_x, src.rows * info.offset_y, src.cols * info.width, src.rows * info.height);
+	//cv::Mat frame_roi = src(roi);
+
+	cv::Mat logo;
+	cv::resize(watermark, logo,cv::Size(int(src.cols * info.width), int(src.rows * info.height)));
+	
+
+	//cv::addWeighted(frame_roi, 1, logo, info.alpha, 1, frame_roi);
+	drawTransparency(src, logo, src.cols * info.offset_x, src.rows * info.offset_y);
+
+	
+}
+

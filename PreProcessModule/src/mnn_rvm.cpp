@@ -19,18 +19,16 @@ long merge_time = 0;
 int alpha_count = 0;
 
 MNNRobustVideoMatting::MNNRobustVideoMatting(
-	const std::string& _mnn_path,
-	unsigned int _num_threads,
-	unsigned int _variant_type,
-	const std::string& background_path
-) :	log_id(_mnn_path.data()),
-	mnn_path(_mnn_path.data()),
-	num_threads(_num_threads),
-	variant_type(_variant_type)
+	const std::string& _mnn_path,	//mnn模型的路径
+	unsigned int _num_threads,	//启动多少个线程
+	unsigned int _variant_type,	//模型的类型 MOBILENETV3 or RESNET50
+	const std::string& background_path	//背景图片的路径
+) :	log_id(_mnn_path.data()), mnn_path(_mnn_path.data()),
+	num_threads(_num_threads), variant_type(_variant_type)
 {
 	initialize_interpreter();
 	initialize_context();
-	initialize_pretreat();
+	initialize_pretreat();	//pretreat用来将传入的图片数据转换成需要格式
 	set_background_image(background_path);
 	is_processing = true;
 }
@@ -173,7 +171,8 @@ void MNNRobustVideoMatting::detect_pic(const std::string& img_path, const std::s
 	cv::Mat merge_mat = cv::Mat(foremat.size(), foremat.type());
 	this->alpha_merge(merge_mat);
 
-	imshow("mergemat", merge_mat);
+	//imshow("mergemat", merge_mat);
+	cv::imwrite(output_path, merge_mat);
 }
 
 void MNNRobustVideoMatting::detect_video(const std::string& video_path, const std::string& output_path)
@@ -460,16 +459,12 @@ void MNNRobustVideoMatting::alpha_matting_loop(bool video_mode)
 }
 
 void MNNRobustVideoMatting::update_alpha(const std::map<std::string, MNN::Tensor*>& output_tensors) {
-	//auto device_fgr_ptr = output_tensors.at("fgr");
 	auto device_pha_ptr = output_tensors.at("pha");
 
-	//MNN::Tensor host_fgr_tensor(device_fgr_ptr, device_fgr_ptr->getDimensionType());  // NCHW
 	MNN::Tensor host_pha_tensor(device_pha_ptr, device_pha_ptr->getDimensionType());  // NCHW
 
-	//device_fgr_ptr->copyToHostTensor(&host_fgr_tensor);
 	device_pha_ptr->copyToHostTensor(&host_pha_tensor);	//todo is it duplicated?
 
-	//float* fgr_ptr = host_fgr_tensor.host<float>();
 	float* pha_ptr = host_pha_tensor.host<float>();
 
 	const unsigned int channel_step = tensor_height * tensor_width;		//	480*640=307200
@@ -536,7 +531,6 @@ void MNNRobustVideoMatting::alpha_merge(cv::Mat& merge_mat)
 		char* bptr = reinterpret_cast<char*>(backmat.data);
 		char* alp_ptr = reinterpret_cast<char*>(alpha.data);
 		char* outImagePtr = reinterpret_cast<char*>(merge_mat.data);
-		//std::cout << foremat.type() << backmat.type() << alpha.type() << outImage.type() << std::endl;
 
 		const unsigned int channel_step = foremat.rows * foremat.cols;
 

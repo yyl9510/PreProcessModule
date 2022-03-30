@@ -35,3 +35,15 @@ void BrightnessAndContrastAuto(const cv::Mat& src, cv::Mat& dst, float clipHistP
 void addBrightness(const cv::Mat& src);
 
 #endif //PREPROCESS_MNN_UTILS_H
+
+struct Info {
+	float alpha;
+	float offset_x;
+	float offset_y;
+	float width;
+	float height;
+	Info(float alpha, float offset_x, float offset_y, float width, float height) 
+	:alpha(alpha), offset_x(offset_x), offset_y(offset_y), width(width), height(height){}
+};
+
+void addWatermark(cv::Mat& src, cv::Mat& watermark, Info info);
